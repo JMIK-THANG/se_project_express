@@ -20,4 +20,4 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-module.experts = mongoose.model("user", userSchema);
+module.exports = mongoose.model("user", userSchema);

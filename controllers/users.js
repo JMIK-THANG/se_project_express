@@ -28,8 +28,8 @@ const createUser = (req, res) => {
 };
 const getUser = (req, res) => {
   const { userId } = req.param;
-  User.findById(userId).orFail();
-  then((user) => res.status(201).send(user)).catch((err) => {
+  User.findById(userId).orFail()
+  .then((user) => res.status(201).send(user)).catch((err) => {
     console.error(err);
     if (err.name === "DocumentNotFoundError") {
       res.status(NOT_FOUND_ERROR_CODE).send({ message: err.message });

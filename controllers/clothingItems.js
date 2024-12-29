@@ -1,15 +1,11 @@
 const ClothingItem = require("../models/clothingItem");
 
 const createItem = (req, res) => {
-  console.log(req);
-  console.log(req.body);
-
   const { name, weather, imageURL } = req.body;
 
   ClothingItem.create(name, weather, imageURL)
-    .then((item) => {
-      console.log(item);
-      res.send({ data });
+    .then(() => {
+      res.send({});
     })
     .catch((e) => {
       res.status(500).send({ message: "Error from createItem", e });
@@ -39,8 +35,8 @@ const deleteItem = (req, res) => {
 
   ClothingItem.findByIdAndDelete(itemId)
     .orFail()
-    .then((item) => res.status(204))
-    .send({ data: item })
+    .then(() => res.status(204))
+    .send({ })
     .catch((e) => {
       res.status(500).send({ message: "Error from deleteItem", e });
     });

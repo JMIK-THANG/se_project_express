@@ -7,15 +7,15 @@ const {
   deleteItem,
 } = require("../controllers/clothingItems");
 
-//Create
+// Create
 router.post("/", createItem);
 
 // Read
 router.get("/", getItems);
 
-//Update
+// Update
 router.put("/:itemId", updateItem);
 
-//Delete
+// Delete
 router.delete("/:itemId", deleteItem);
 module.exports = router;

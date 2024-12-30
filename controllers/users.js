@@ -26,16 +26,16 @@ const createUser = (req, res) => {
     });
 };
 const getUser = (req, res) => {
-  const { userId } = req.param;
+  const { userId } = req.params;
   User.findById(userId)
     .orFail()
-    .then((user) => res.status(201).send(user))
+    .then((user) => res.status(200).send(user))
     .catch((err) => {
       console.error(err);
       if (err.name === "DocumentNotFoundError") {
-        res.status(NOT_FOUND_ERROR_CODE).send({ message: err.message });
-      } else if (err.name === "CastError") {
-        res.status(BAD_REQUEST_ERROR_CODE).send({ message: "Invalid user ID" });
+        return res.status(NOT_FOUND_ERROR_CODE).send({ message: err.message });
+      } if (err.name === "CastError") {
+        return res.status(BAD_REQUEST_ERROR_CODE).send({ message: "Invalid user ID" });
       }
       return res.status(500).send({ message: err.message });
     });

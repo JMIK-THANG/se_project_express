@@ -1,24 +1,24 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 
-const clothingItem = new mongoose.Schema({
+const clothingItem = mongoose.Schema({
   name: {
     type: String,
-    require: true,
+    required: true,
     minlength: [2, 'The minimum length of the "name" field is 2'],
     maxlength: [30, 'The maximum length of the "name" field is 30'],
   },
   weather: {
     type: String,
     required: true,
-    minlength: [2, 'The minimum length of the "name" field is 2'],
-    maxlength: [30, 'The maximum length of the "name" field is 30'],
+    minlength: [2, 'The minimum length of the "weather" field is 2'],
+    maxlength: [30, 'The maximum length of the "weather" field is 30'],
   },
   imageUrl: {
     type: String,
     required: true,
-    minlength: [2, 'The minimum length of the "name" field is 2'],
-    maxlength: [30, 'The maximum length of the "name" field is 30'],
+    minlength: [2, 'The minimum length of the "imageUrl" field is 2'],
+    maxlength: [30, 'The maximum length of the "imageUrl" field is 30'],
 
     validate: {
       validator: (v) => validator.isURL(v),
@@ -27,4 +27,4 @@ const clothingItem = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("clothingItems", clothingItem);
+module.exports = mongoose.model("clothingItem", clothingItem);

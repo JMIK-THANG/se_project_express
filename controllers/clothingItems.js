@@ -8,7 +8,10 @@ const createItem = (req, res) => {
       res.send(item);
     })
     .catch((e) => {
-      res.status(500).send({ message: "Error from createItem", e });
+      if(e.name === "ValidatorError"){
+        return res.status(400).send({message: e.message});
+      }
+      return res.status(500).send({ message: "Error from createItem", e });
     });
   };
 

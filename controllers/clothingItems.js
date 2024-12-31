@@ -1,9 +1,9 @@
 const ClothingItem = require("../models/clothingItem");
 
 const createItem = (req, res) => {
-  const { name, weather, imageUrl } = req.body;
+  const { name, weather, imageUrl, owner, likes } = req.body;
   console.log(req.body);
-  ClothingItem.create({ name, weather, imageUrl })
+  ClothingItem.create({ name, weather, imageUrl, owner, likes })
     .then((item) => {
       console.log("here is your item");
       res.send(item);
@@ -47,7 +47,7 @@ const deleteItem = (req, res) => {
     });
 };
 const likeItem = (req, res) => {
-  const {itemId} = req.params;
+  const { itemId } = req.params;
   ClothingItem.findByIdAndUpdate(
     itemId,
     { $addToSet: { likes: req.user._id } },
@@ -56,7 +56,27 @@ const likeItem = (req, res) => {
     .orFail()
     .then((item) => res.status(200).send(item))
     .catch((e) => {
-      res.status(500).send({ message: "Error from like Items", e });
+      if (e.name === "CastError"){
+        return res.status(400).send({message: "Error form like items, Bad request."})
+      }
+      if (e.name === "DocumentNotFoundError"){
+        return res.status(404).send({message: "Error form like items, Bad request."})
+      }
+      return res.status(500).send({ message: "Error from like Items", e });
     });
 };
-module.exports = { createItem, getItems, updateItem, deleteItem, likeItem };
+
+const unlikeItem = (req, res ) => {
+  const {itemId} = req.params;
+  ClothingItem.findByIdAndUpdate(
+    itemId,
+    { $pull: { likes: req.user._id } },
+    { new: true }
+  )
+  .orFail()
+  .then((item) => res.status(200).send(item))
+  .catch((e) => {
+    res.status(500).send({ message: "Error from unlike Items", e });
+  });
+}
+module.exports = { createItem, getItems, updateItem, deleteItem, likeItem, unlikeItem };

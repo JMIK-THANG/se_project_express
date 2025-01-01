@@ -1,7 +1,8 @@
 const ClothingItem = require("../models/clothingItem");
 
 const createItem = (req, res) => {
-  const { name, weather, imageUrl, owner, likes } = req.body;
+  const { name, weather, imageUrl, likes } = req.body;
+  const owner = req.user._id
   console.log(req.body);
   ClothingItem.create({ name, weather, imageUrl, owner, likes })
     .then((item) => {

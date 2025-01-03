@@ -2,8 +2,8 @@ const ClothingItem = require("../models/clothingItem");
 
 const createItem = (req, res) => {
   const { name, weather, imageUrl, likes } = req.body;
-  const owner = req.user._id
-  console.log(req.body);
+  const owner = req.user._id;
+
   ClothingItem.create({ name, weather, imageUrl, owner, likes })
     .then((item) => {
       console.log("here is your item");
@@ -37,13 +37,22 @@ const updateItem = (req, res) => {
       res.status(500).send({ message: "Error from updateItem", e });
     });
 };
+
 const deleteItem = (req, res) => {
   const { itemId } = req.params;
+
+  console.log(itemId); // <------
 
   ClothingItem.findByIdAndDelete(itemId)
     .orFail()
     .then(() => res.status(200).send({ message: "Item deleted" }))
+    // handle the case when the id was not found in the DB, and return status 400
     .catch((e) => {
+      if (e.name === "CastError") {
+        return res
+          .status(400)
+          .send({ message: "Error form like items, Bad request." });
+      }
       res.status(500).send({ message: "Error from deleteItem", e });
     });
 };
@@ -57,27 +66,44 @@ const likeItem = (req, res) => {
     .orFail()
     .then((item) => res.status(200).send(item))
     .catch((e) => {
-      if (e.name === "CastError"){
-        return res.status(400).send({message: "Error form like items, Bad request."})
+      if (e.name === "CastError") {
+        return res
+          .status(400)
+          .send({ message: "Error form like items, Bad request." });
       }
-      if (e.name === "DocumentNotFoundError"){
-        return res.status(404).send({message: "Error form like items, Bad request."})
+      if (e.name === "DocumentNotFoundError") {
+        return res
+          .status(404)
+          .send({ message: "Error form like items, Bad request." });
       }
       return res.status(500).send({ message: "Error from like Items", e });
     });
 };
 
-const unlikeItem = (req, res ) => {
-  const {itemId} = req.params;
+const unlikeItem = (req, res) => {
+  const { itemId } = req.params;
+  console.log(req);
   ClothingItem.findByIdAndUpdate(
-    itemId,
+    req.params.itemId,
     { $pull: { likes: req.user._id } },
     { new: true }
   )
-  .orFail()
-  .then((item) => res.status(200).send(item))
-  .catch((e) => {
-    res.status(500).send({ message: "Error from unlike Items", e });
-  });
-}
-module.exports = { createItem, getItems, updateItem, deleteItem, likeItem, unlikeItem };
+    .orFail()
+    .then((item) => res.status(200).send(item))
+    .catch((e) => {
+      if (e.name === "CastError") {
+        return res
+          .status(400)
+          .send({ message: "Error form unlike items, Bad request." });
+      }
+      return res.status(500).send({ message: "Error from unlike Items", e });
+    });
+};
+module.exports = {
+  createItem,
+  getItems,
+  updateItem,
+  deleteItem,
+  likeItem,
+  unlikeItem,
+};

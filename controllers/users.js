@@ -19,7 +19,7 @@ const createUser = (req, res) => {
     .then((user) => res.status(CREATED).send(user))
     .catch((err) => {
       if (err.name === "ValidationError") {
-        return res.status(NOT_FOUND_ERROR_CODE).send({ message: err.message });
+        return res.status(BAD_REQUEST_ERROR_CODE).send({ message: err.message });
       }
       return res.status(INTERNAL_SERVER_ERROR).send({ message: err.message });
     });

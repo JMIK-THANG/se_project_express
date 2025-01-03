@@ -4,7 +4,6 @@ const {
   NOT_FOUND_ERROR_CODE,
   INTERNAL_SERVER_ERROR,
   SUCCESS,
-  CREATED,
 } = require("../utils/errors");
 
 const createItem = (req, res) => {
@@ -32,16 +31,6 @@ const getItems = (req, res) => {
     });
 };
 
-const updateItem = (req, res) => {
-  const { itemId } = req.params;
-  const { imageUrl } = req.body;
-  ClothingItem.findByIdAndUpdate(itemId, { $set: { imageUrl } })
-    .orFail()
-    .then((item) => res.status(SUCCESS).send({ data: item }))
-    .catch((e) =>
-      res.status(INTERNAL_SERVER_ERROR).send({ message: "Error from updateItem", e })
-    );
-};
 
 const deleteItem = (req, res) => {
   const { itemId } = req.params;
@@ -53,9 +42,14 @@ const deleteItem = (req, res) => {
       if (e.name === "CastError") {
         return res
           .status(BAD_REQUEST_ERROR_CODE)
-          .send({ message: "Error form like items, Bad request." });
+          .send({ message: "Error form delete items, Bad request." });
       }
-      return res.status(NOT_FOUND_ERROR_CODE).send({ message: "Error from deleteItem", e });
+      if (e.name === "DocumentNotFoundError") {
+        return res
+          .status(NOT_FOUND_ERROR_CODE)
+          .send({ message: "Error form delete items, Page Not Found!." });
+      }
+      return res.status(INTERNAL_SERVER_ERROR).send({ message: "Error from deleteItem", e });
     });
 };
 const likeItem = (req, res) => {
@@ -76,7 +70,7 @@ const likeItem = (req, res) => {
       if (e.name === "DocumentNotFoundError") {
         return res
           .status(NOT_FOUND_ERROR_CODE)
-          .send({ message: "Error form like items, Bad request." });
+          .send({ message: "Error form like items, Page Not Found!." });
       }
       return res.status(INTERNAL_SERVER_ERROR).send({ message: "Error from like Items", e });
     });
@@ -98,13 +92,17 @@ const unlikeItem = (req, res) => {
           .status(BAD_REQUEST_ERROR_CODE)
           .send({ message: "Error form unlike items, Bad request." });
       }
-      return res.status(NOT_FOUND_ERROR_CODE).send({ message: "Error from unlike Items", e });
+      if (e.name === "DocumentNotFoundError") {
+        return res
+          .status(NOT_FOUND_ERROR_CODE)
+          .send({ message: "Error form unlike items, Page Not Found!." });
+      }
+      return res.status(INTERNAL_SERVER_ERROR).send({ message: "Error from unlike Items", e });
     });
 };
 module.exports = {
   createItem,
   getItems,
-  updateItem,
   deleteItem,
   likeItem,
   unlikeItem,

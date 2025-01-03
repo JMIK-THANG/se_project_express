@@ -11,15 +11,10 @@ const clothingItem = mongoose.Schema({
   weather: {
     type: String,
     required: true,
-    minlength: [2, 'The minimum length of the "weather" field is 2'],
-    maxlength: [30, 'The maximum length of the "weather" field is 30'],
   },
   imageUrl: {
     type: String,
     required: true,
-    minlength: [2, 'The minimum length of the "imageUrl" field is 2'],
-    maxlength: [30, 'The maximum length of the "imageUrl" field is 30'],
-
     validate: {
       validator: (v) => validator.isURL(v),
       message: "Link is not Valid",

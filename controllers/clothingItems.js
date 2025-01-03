@@ -31,9 +31,9 @@ const updateItem = (req, res) => {
   ClothingItem.findByIdAndUpdate(itemId, { $set: { imageUrl } })
     .orFail()
     .then((item) => res.status(200).send({ data: item }))
-    .catch((e) => {
-      res.status(500).send({ message: "Error from updateItem", e });
-    });
+    .catch((e) =>
+       res.status(500).send({ message: "Error from updateItem", e })
+    );
 };
 
 const deleteItem = (req, res) => {
@@ -48,7 +48,7 @@ const deleteItem = (req, res) => {
           .status(400)
           .send({ message: "Error form like items, Bad request." });
       }
-      res.status(404).send({ message: "Error from deleteItem", e });
+      return res.status(404).send({ message: "Error from deleteItem", e });
     });
 };
 const likeItem = (req, res) => {

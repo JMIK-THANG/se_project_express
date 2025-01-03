@@ -18,7 +18,9 @@ const createItem = (req, res) => {
       if (err.name === "ValidationError") {
         res.status(BAD_REQUEST_ERROR_CODE).send({ message: err.message });
       } else {
-        res.status(INTERNAL_SERVER_ERROR).send({ message: "Error from createItem", err });
+        res
+          .status(INTERNAL_SERVER_ERROR)
+          .send({ message: "Error from createItem", err });
       }
     });
 };
@@ -27,10 +29,11 @@ const getItems = (req, res) => {
   ClothingItem.find({})
     .then((items) => res.status(SUCCESS).send(items))
     .catch((e) => {
-      res.status(INTERNAL_SERVER_ERROR).send({ message: "Error from getItems", e });
+      res
+        .status(INTERNAL_SERVER_ERROR)
+        .send({ message: "Error from getItems", e });
     });
 };
-
 
 const deleteItem = (req, res) => {
   const { itemId } = req.params;
@@ -49,7 +52,9 @@ const deleteItem = (req, res) => {
           .status(NOT_FOUND_ERROR_CODE)
           .send({ message: "Error form delete items, Page Not Found!." });
       }
-      return res.status(INTERNAL_SERVER_ERROR).send({ message: "Error from deleteItem", e });
+      return res
+        .status(INTERNAL_SERVER_ERROR)
+        .send({ message: "Error from deleteItem" });
     });
 };
 const likeItem = (req, res) => {
@@ -72,7 +77,9 @@ const likeItem = (req, res) => {
           .status(NOT_FOUND_ERROR_CODE)
           .send({ message: "Error form like items, Page Not Found!." });
       }
-      return res.status(INTERNAL_SERVER_ERROR).send({ message: "Error from like Items", e });
+      return res
+        .status(INTERNAL_SERVER_ERROR)
+        .send({ message: "Error from like Items" });
     });
 };
 
@@ -97,7 +104,9 @@ const unlikeItem = (req, res) => {
           .status(NOT_FOUND_ERROR_CODE)
           .send({ message: "Error form unlike items, Page Not Found!." });
       }
-      return res.status(INTERNAL_SERVER_ERROR).send({ message: "Error from unlike Items", e });
+      return res
+        .status(INTERNAL_SERVER_ERROR)
+        .send({ message: "Error from unlike Items" });
     });
 };
 module.exports = {

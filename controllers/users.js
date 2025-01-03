@@ -10,7 +10,7 @@ const {
 const getUsers = (req, res) => {
   User.find({})
     .then((users) => res.status(SUCCESS).send(users))
-    .catch((err) => res.status(INTERNAL_SERVER_ERROR).send({ message: err.message }));
+    .catch(() => res.status(INTERNAL_SERVER_ERROR).send({ message:"An error has occurred on the server" }));
 };
 
 const createUser = (req, res) => {
@@ -19,9 +19,9 @@ const createUser = (req, res) => {
     .then((user) => res.status(CREATED).send(user))
     .catch((err) => {
       if (err.name === "ValidationError") {
-        return res.status(BAD_REQUEST_ERROR_CODE).send({ message: err.message });
+        return res.status(BAD_REQUEST_ERROR_CODE).send({ message: "Bad request" });
       }
-      return res.status(INTERNAL_SERVER_ERROR).send({ message: err.message });
+      return res.status(INTERNAL_SERVER_ERROR).send({ message: "An error has occurred on the server" });
     });
 };
 const getUser = (req, res) => {
@@ -31,14 +31,14 @@ const getUser = (req, res) => {
     .then((user) => res.status(SUCCESS).send(user))
     .catch((err) => {
       if (err.name === "DocumentNotFoundError") {
-        return res.status(NOT_FOUND_ERROR_CODE).send({ message: err.message });
+        return res.status(NOT_FOUND_ERROR_CODE).send({ message: "User Not Found!" });
       }
       if (err.name === "CastError") {
         return res
           .status(BAD_REQUEST_ERROR_CODE)
           .send({ message: "Invalid user ID" });
       }
-      return res.status(INTERNAL_SERVER_ERROR).send({ message: err.message });
+      return res.status(INTERNAL_SERVER_ERROR).send({ message: "An error has occurred on the server" });
     });
 };
 module.exports = { getUsers, createUser, getUser };

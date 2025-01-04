@@ -16,11 +16,11 @@ const createItem = (req, res) => {
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
-        res.status(BAD_REQUEST_ERROR_CODE).send({ message: err.message });
+        res.status(BAD_REQUEST_ERROR_CODE).send({ message: "Bad Request"});
       } else {
         res
           .status(INTERNAL_SERVER_ERROR)
-          .send({ message: "Error from createItem", err });
+          .send({ message: "Error from createItem" });
       }
     });
 };
@@ -31,7 +31,7 @@ const getItems = (req, res) => {
     .catch((e) => {
       res
         .status(INTERNAL_SERVER_ERROR)
-        .send({ message: "Error from getItems", e });
+        .send({ message: "Error from getItems"});
     });
 };
 

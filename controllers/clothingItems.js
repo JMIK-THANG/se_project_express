@@ -16,7 +16,7 @@ const createItem = (req, res) => {
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
-        res.status(BAD_REQUEST_ERROR_CODE).send({ message: "Bad Request"});
+        res.status(BAD_REQUEST_ERROR_CODE).send({ message: "Bad Request" });
       } else {
         res
           .status(INTERNAL_SERVER_ERROR)
@@ -28,10 +28,10 @@ const createItem = (req, res) => {
 const getItems = (req, res) => {
   ClothingItem.find({})
     .then((items) => res.status(SUCCESS).send(items))
-    .catch((e) => {
+    .catch(() => {
       res
         .status(INTERNAL_SERVER_ERROR)
-        .send({ message: "Error from getItems"});
+        .send({ message: "Error from getItems" });
     });
 };
 

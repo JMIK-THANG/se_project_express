@@ -3,6 +3,8 @@ const NOT_FOUND_ERROR_CODE = 404;
 const INTERNAL_SERVER_ERROR = 500;
 const SUCCESS = 200;
 const CREATED = 201;
+const UNAUTHORIZED = 401;
+const CONFLICT = 409;
 
 module.exports = {
   BAD_REQUEST_ERROR_CODE,
@@ -10,4 +12,6 @@ module.exports = {
   INTERNAL_SERVER_ERROR,
   SUCCESS,
   CREATED,
+  UNAUTHORIZED,
+  CONFLICT
 };

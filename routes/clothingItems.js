@@ -12,6 +12,8 @@ const {
 router.post("/", createItem);
 
 // Read
+// These are endpoints..
+// What is an API endpoint? 
 router.get("/", getItems);
 
 // Delete

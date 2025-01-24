@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: "String",
-    requried: [true, "Please enter the correct password"],
+    required: [true, "Please enter the correct password"],
     select: false,
   },
 });

@@ -4,7 +4,7 @@ const { JWT_SECRET } = require("../utils/config");
 
 const auth = (req, res, next) => {
   const { authorization } = req.headers;
-  if (!authorization || !authorization.startsWith("Beearer")) {
+  if (!authorization || !authorization.startsWith("Bearer")) {
     return res.status(UNAUTHORIZED).send({ message: "Authorization required" });
   }
   const token = authorization.replace("Bearer ", "");
@@ -19,7 +19,7 @@ const auth = (req, res, next) => {
   next();
 };
 
-module.exports = auth;
+module.exports = { auth };
 
 // Grab the authorization header from the request.
 // Verify that the header exists. If it’s doesn’t, return unauthorized error.

@@ -20,9 +20,3 @@ const auth = (req, res, next) => {
 };
 
 module.exports = { auth };
-
-// Grab the authorization header from the request.
-// Verify that the header exists. If it’s doesn’t, return unauthorized error.
-// If it does exist, call jwt.verify(<THAT TOKEN>, JWT_SECRET)
-// Check the payload of that response.
-// If it’s verified, set req.user = payload and call next()

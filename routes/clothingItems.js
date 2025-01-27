@@ -1,26 +1,22 @@
 const router = require("express").Router();
+const {auth} = require("../middlewares/auth");
 
 const {
   createItem,
   getItems,
   deleteItem,
   likeItem,
-  unlikeItem
+  unlikeItem,
 } = require("../controllers/clothingItems");
 
-// Create
-router.post("/", createItem);
+router.post("/", auth, createItem);
 
-// Read
-// These are endpoints..
-// What is an API endpoint? 
 router.get("/", getItems);
 
-// Delete
-router.delete("/:itemId", deleteItem);
+router.delete("/:itemId",auth,  deleteItem);
 
-router.put("/:itemId/likes", likeItem);
+router.put("/:itemId/likes", auth, likeItem);
 
-router.delete("/:itemId/likes", unlikeItem);
+router.delete("/:itemId/likes", auth,  unlikeItem);
 
 module.exports = router;

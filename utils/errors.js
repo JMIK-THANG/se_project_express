@@ -5,6 +5,7 @@ const SUCCESS = 200;
 const CREATED = 201;
 const UNAUTHORIZED = 401;
 const CONFLICT = 409;
+const FORBIDDEN = 403;
 
 module.exports = {
   BAD_REQUEST_ERROR_CODE,
@@ -13,5 +14,6 @@ module.exports = {
   SUCCESS,
   CREATED,
   UNAUTHORIZED,
-  CONFLICT
+  CONFLICT,
+  FORBIDDEN
 };

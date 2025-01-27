@@ -4,12 +4,12 @@ const {
   NOT_FOUND_ERROR_CODE,
   INTERNAL_SERVER_ERROR,
   SUCCESS,
+  FORBIDDEN,
 } = require("../utils/errors");
 
 const createItem = (req, res) => {
   const { name, weather, imageUrl, likes } = req.body;
   const owner = req.user._id;
-
   ClothingItem.create({ name, weather, imageUrl, owner, likes })
     .then((item) => {
       res.send(item);
@@ -37,28 +37,39 @@ const getItems = (req, res) => {
 
 const deleteItem = (req, res) => {
   const { itemId } = req.params;
-
-  ClothingItem.findByIdAndDelete(itemId)
-    .orFail()
-    .then(() => res.status(SUCCESS).send({ message: "Item deleted" }))
-    .catch((e) => {
-      if (e.name === "CastError") {
+  const owner = req.user._id;
+  ClothingItem.findById(itemId)
+    .then((item) => {
+      if (String(item.owner) !== owner) {
+        return res
+          .status(FORBIDDEN)
+          .send({ message: "Error from delete item, you are not allow to delete the item." });
+      }
+      return item
+        .deleteOne()
+        .then(() => res.send({ message: " Item deleted." }));
+    })
+    .catch((err) => {
+      if (err.name === "CastError") {
         return res
           .status(BAD_REQUEST_ERROR_CODE)
-          .send({ message: "Error form delete items, Bad request." });
+          .send({ message: "Error from delete item, bad request. " });
       }
-      if (e.name === "DocumentNotFoundError") {
+      if (itemId) {
         return res
           .status(NOT_FOUND_ERROR_CODE)
-          .send({ message: "Error form delete items, Page Not Found!." });
+          .send({ message: "Item not found." });
       }
       return res
         .status(INTERNAL_SERVER_ERROR)
-        .send({ message: "Error from deleteItem" });
+        .send({
+          message: "Error from delete item, error has occurred on the server.",
+        });
     });
 };
 const likeItem = (req, res) => {
   const { itemId } = req.params;
+  console.log(req.user._id);
   ClothingItem.findByIdAndUpdate(
     itemId,
     { $addToSet: { likes: req.user._id } },

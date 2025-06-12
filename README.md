@@ -21,4 +21,12 @@ This project was built using Node.js and Express.js to create Back End Developme
 
 ### Technologies used
 
-GitHub, Express.js, Npm, ESLint, JavaScript, Prettier, JSON, Node.js, MongoDb, Validator.js, Postman, GitHub Actions,
+GitHub, Express.js, Npm, ESLint, JavaScript, Prettier, JSON, Node.js, MongoDb, Validator.js, Postman, GitHub Actions
+
+# Weather Clothing App
+You can check out the live version of the project here: [wtwrjmik.crabdance.com](https://www.wtwrjmik.crabdance.com/)
+[Visit the Live Site](https://www.wtwrjmik.crabdance.com/)
+https://www.wtwrjmik.crabdance.com/
+
+
+

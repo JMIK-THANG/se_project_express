@@ -13,14 +13,14 @@ const createItem = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
-        throw new BadRequestError("Request validation fail.");
+        next(new BadRequestError("Request validation fail."));
       } else {
         next(err);
       }
     });
 };
 
-const getItems = (req, res,next) => {
+const getItems = (req, res, next) => {
   ClothingItem.find({})
     .then((items) => res.status(SUCCESS).send(items))
     .catch((err) => {
@@ -32,6 +32,7 @@ const deleteItem = (req, res, next) => {
   const { itemId } = req.params;
   const owner = req.user._id;
   ClothingItem.findById(itemId)
+  .orFail()
     .then((item) => {
       if (String(item.owner) !== owner) {
         return next(
@@ -52,7 +53,7 @@ const deleteItem = (req, res, next) => {
           )
         );
       }
-      if (itemId) {
+      if (err.name === "DocumentNotFoundError") {
         return next(new NotFoundError("Item not found."));
       }
       return next(err);

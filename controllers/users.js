@@ -13,18 +13,19 @@ const { JWT_SECRET } = require("../utils/config");
 const BadRequestError = require("../errors/badRequestError");
 const NotFoundError = require("../errors/notFoundError");
 const UnauthorizedError = require("../errors/unauthorizedError");
+const Conflict = require("../errors/conflictError");
 
 const createUser = (req, res, next) => {
   const { name, avatar, email, password } = req.body;
 
   if (!email || !password) {
-    throw new BadRequestError("Email and Password are required.");
+    next(new BadRequestError("Email and Password are required."));
   }
 
   return User.findOne({ email })
     .then((user) => {
       if (user) {
-        return res.status(CONFLICT).send({ message: "User already exist" });
+        next(new Conflict("User already exist."));
       }
 
       return bcrypt.hash(password, 10);
@@ -39,7 +40,7 @@ const createUser = (req, res, next) => {
     )
     .catch((err) => {
       if (err.name === "ValidationError") {
-        throw new BadRequestError("Bad request: Invalid data sent");
+        next(new BadRequestError("Bad request: Invalid data sent"));
       }
 
       next(err);
@@ -73,7 +74,11 @@ const updateProfile = (req, res, next) => {
     .catch((err) => {
       if (err.name === "ValidationError") {
         return next(
-          new BadRequestError("Invalid profile data. Please check your input.")
+          next(
+            new BadRequestError(
+              "Invalid profile data. Please check your input."
+            )
+          )
         );
       }
       if (err.name === "DocumentNotFoundError") {

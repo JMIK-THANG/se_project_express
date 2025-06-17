@@ -32,7 +32,7 @@ const deleteItem = (req, res, next) => {
   const { itemId } = req.params;
   const owner = req.user._id;
   ClothingItem.findById(itemId)
-  .orFail()
+    .orFail()
     .then((item) => {
       if (String(item.owner) !== owner) {
         return next(
@@ -61,7 +61,6 @@ const deleteItem = (req, res, next) => {
 };
 const likeItem = (req, res, next) => {
   const { itemId } = req.params;
-  console.log(req.user._id);
   ClothingItem.findByIdAndUpdate(
     itemId,
     { $addToSet: { likes: req.user._id } },

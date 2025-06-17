@@ -5,7 +5,6 @@ const User = require("../models/user");
 const {
   SUCCESS,
   CREATED,
-  CONFLICT,
   INTERNAL_SERVER_ERROR,
 } = require("../utils/errors");
 const { JWT_SECRET } = require("../utils/config");
@@ -25,7 +24,7 @@ const createUser = (req, res, next) => {
   return User.findOne({ email })
     .then((user) => {
       if (user) {
-        next(new Conflict("User already exist."));
+        return next(new Conflict("User already exist."));
       }
 
       return bcrypt.hash(password, 10);
@@ -49,7 +48,6 @@ const createUser = (req, res, next) => {
 
 const getCurrentUser = (req, res, next) => {
   const currentUser = req.user;
-  console.log(currentUser);
   User.findById(currentUser._id)
     .then((user) => res.status(SUCCESS).send(user))
     .catch((err) => {
